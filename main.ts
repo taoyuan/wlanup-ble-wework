@@ -15,9 +15,9 @@ const wxWlanupService = new WxWlanupService(supplicant, {
 bleno.on('stateChange', function (state) {
   console.log('on -> stateChange: ' + state);
   if (state === 'poweredOn') {
-    startCustomAdvertising([wxWlanupService.uuid], buildScanData(deviceId));
+    startCustomAdvertising(bleno, [wxWlanupService.uuid], buildScanData(deviceId));
   } else {
-    stopAdvertising();
+    stopAdvertising(bleno);
   }
 });
 

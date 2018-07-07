@@ -1,4 +1,4 @@
-import {PrimaryService} from "bleno";
+import PrimaryService = require("bleno/lib/primary-service");
 import * as Bignum from "bignum";
 import {randomBytes} from "crypto";
 import {Supplicant} from "./supplicant";
@@ -19,6 +19,8 @@ export class WxWlanupService extends PrimaryService {
 
   sn: string;
   key: string;
+
+  characteristics;
 
   ee: EventEmitter;
   ccWrite: WxWlanupCharacteristicWrite;

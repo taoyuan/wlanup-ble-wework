@@ -1,6 +1,4 @@
-import * as bleno from "bleno";
-
-export function startCustomAdvertising(serviceUuids: string[], scanData: Buffer): Promise<void> {
+export function startCustomAdvertising(bleno, serviceUuids: string[], scanData: Buffer): Promise<void> {
   return new Promise((resolve, reject) => {
     if (bleno.state !== 'poweredOn') {
       return reject(new Error('Could not start advertising, state is ' + bleno.state + ' (not poweredOn)'));
@@ -18,7 +16,7 @@ export function startCustomAdvertising(serviceUuids: string[], scanData: Buffer)
   })
 }
 
-export function stopAdvertising(): Promise<void> {
+export function stopAdvertising(bleno): Promise<void> {
   return new Promise(resolve => bleno.stopAdvertising(resolve));
 }
 

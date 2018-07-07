@@ -1,4 +1,4 @@
-import {Characteristic} from "bleno";
+import Characteristic = require("bleno/lib/characteristic");
 import {fragment} from "./utils";
 import {EventEmitter} from "events";
 

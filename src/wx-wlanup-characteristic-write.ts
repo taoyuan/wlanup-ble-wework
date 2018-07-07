@@ -1,4 +1,4 @@
-import {Characteristic} from "bleno";
+import Characteristic = require("bleno/lib/characteristic");
 import {Parser} from "./parser";
 
 export class WxWlanupCharacteristicWrite extends Characteristic {
@@ -18,6 +18,6 @@ export class WxWlanupCharacteristicWrite extends Characteristic {
 
   onWriteRequest(data, offset, withoutResponse, callback) {
     this._parser.parse(data);
-    callback && callback(this.RESULT_SUCCESS);
+    callback && callback(Characteristic.RESULT_SUCCESS);
   };
 }
