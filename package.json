@@ -1,0 +1,46 @@
+{
+  "name": "wlanup-ble-wework",
+  "version": "0.0.0",
+  "description": "wxble",
+  "license": "MIT",
+  "repository": "",
+  "author": "",
+  "keywords": [
+    ""
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib",
+    "build": "npm run clean && echo Using TypeScript && tsc --version && tsc --pretty",
+    "test": "npm run build && mocha --require ts-node/register --recursive \"test/**/*.test.ts\"",
+    "main": "node -r ts-node/register ./main.ts",
+    "start": "node -r ts-node/register ./main.ts"
+  },
+  "dependencies": {
+    "bignum": "^0.13.0",
+    "bl": "^2.0.1",
+    "bleno": "^0.5.0",
+    "dateformat": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/bignum": "0.0.29",
+    "@types/bl": "^0.8.32",
+    "@types/bleno": "^0.4.1",
+    "@types/chai": "^4.1.4",
+    "@types/dateformat": "^1.0.1",
+    "@types/mocha": "^5.2.4",
+    "@types/node": "^10.5.2",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "rimraf": "^2.6.2",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}
