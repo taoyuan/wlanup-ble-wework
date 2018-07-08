@@ -1,7 +1,7 @@
 import Characteristic = require("bleno/lib/characteristic");
 import {Parser} from "./parser";
 
-export class WxWlanupCharacteristicWrite extends Characteristic {
+export class WeworkBlewcCharacteristicWrite extends Characteristic {
 
   _parser: Parser = new Parser();
 

@@ -16,11 +16,12 @@ export declare class WxWlanupService extends PrimaryService {
     _nonce: Bignum;
     sn: string;
     key: string;
+    uuid: string;
     characteristics: any;
     ee: EventEmitter;
     ccWrite: WxWlanupCharacteristicWrite;
     ccIndicate: WxWlanupCharacteristicIndicate;
-    constructor(supplicant: Supplicant, options: WxWlanupServiceOptions);
+    constructor(supplicant: Supplicant, options: WxWlanupServiceOptions, ee?: EventEmitter);
     protected init(): void;
     sendHandshakeRequest(sn: string): void;
     handle(packet: Packet): void;

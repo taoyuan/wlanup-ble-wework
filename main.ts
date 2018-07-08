@@ -1,21 +1,18 @@
 import * as bleno from "bleno";
-import {buildScanData, startCustomAdvertising, stopAdvertising, WxWlanupService} from "./src";
+import {startCustomAdvertising, stopAdvertising, WeworkBlewc} from "./src";
 import {MockSuccessSupplicant} from "./test/mocks/mock-supplicant";
 
 const sn = 'DLBY000000000001';
-const deviceId = '7040252286565956865';
-const secretNo = 'a15aa20deaea81bb6ab83ea46f73ea97';
+const did = '7040252286565956865';
+const key = 'a15aa20deaea81bb6ab83ea46f73ea97';
 
 const supplicant = new MockSuccessSupplicant();
-const wxWlanupService = new WxWlanupService(supplicant, {
-  sn,
-  key: secretNo
-});
+const wework = new WeworkBlewc(supplicant, {sn, key, did});
 
 bleno.on('stateChange', function (state) {
   console.log('on -> stateChange: ' + state);
   if (state === 'poweredOn') {
-    startCustomAdvertising(bleno, [wxWlanupService.uuid], buildScanData(deviceId));
+    startCustomAdvertising(bleno, [wework.service.uuid], wework.buildScanData());
   } else {
     stopAdvertising(bleno);
   }
@@ -25,13 +22,11 @@ bleno.on('advertisingStart', function (error) {
   console.log('on -> advertisingStart: ' + (error ? 'error ' + error : 'success'));
 
   if (!error) {
-    bleno.setServices([
-      wxWlanupService
-    ]);
+    bleno.setServices([wework.service]);
   }
 });
 
-wxWlanupService.ee.on('error', (err) => {
+wework.on('error', (err) => {
   console.error(err);
   bleno.disconnect();
 });

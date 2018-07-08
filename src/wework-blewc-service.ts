@@ -2,41 +2,42 @@ import PrimaryService = require("bleno/lib/primary-service");
 import * as Bignum from "bignum";
 import {randomBytes} from "crypto";
 import {Supplicant} from "./supplicant";
-import {WxWlanupCharacteristicWrite} from "./wx-wlanup-characteristic-write";
-import {WxWlanupCharacteristicIndicate} from "./wx-wlanup-characteristic-indicate";
+import {WeworkBlewcCharacteristicWrite} from "./wework-blewc-characteristic-write";
+import {WeworkBlewcCharacteristicIndicate} from "./wework-blewc-characteristic-indicate";
 import {CMD, HandshakeResponse, Packet, WiFiCreds} from "./packet";
 import {encodePacket, hmacsha1, nextId, sort} from "./utils";
 import {EventEmitter} from "events";
 
-export interface WxWlanupServiceOptions {
+export interface WeworkBlewcServiceOptions {
   sn: string;
   key: string;
 }
 
-export class WxWlanupService extends PrimaryService {
+export class WeworkBlewcService extends PrimaryService {
   _authorized: boolean = false;
   _nonce: Bignum;
 
   sn: string;
   key: string;
 
+  uuid: string;
   characteristics;
 
   ee: EventEmitter;
-  ccWrite: WxWlanupCharacteristicWrite;
-  ccIndicate: WxWlanupCharacteristicIndicate;
+  ccWrite: WeworkBlewcCharacteristicWrite;
+  ccIndicate: WeworkBlewcCharacteristicIndicate;
 
-  constructor(protected supplicant: Supplicant, options: WxWlanupServiceOptions) {
+  constructor(protected supplicant: Supplicant, options: WeworkBlewcServiceOptions, ee?: EventEmitter) {
     super({uuid: 'FCE7'});
 
     this.sn = options.sn;
     this.key = options.key;
 
-    this.ee = new EventEmitter();
+    this.ee = ee ||  new EventEmitter();
 
-    this.ccWrite = new WxWlanupCharacteristicWrite();
+    this.ccWrite = new WeworkBlewcCharacteristicWrite();
     this.ccWrite.onPacket = packet => this.handle(packet);
-    this.ccIndicate = new WxWlanupCharacteristicIndicate(this.ee);
+    this.ccIndicate = new WeworkBlewcCharacteristicIndicate(this.ee);
 
     this.characteristics = [this.ccWrite, this.ccIndicate];
 

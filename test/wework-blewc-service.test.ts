@@ -1,6 +1,6 @@
 import {assert} from "chai";
 
-import {Parser, WxWlanupService} from "../src";
+import {Parser, WeworkBlewcService} from "../src";
 import {MockSuccessSupplicant} from "./mocks/mock-supplicant";
 import {samples} from "./support";
 import * as s from "./support";
@@ -10,7 +10,7 @@ describe('service', () => {
   it('should set wifi', (done) => {
     const res: Buffer[] = [];
 
-    const service = new WxWlanupService(new MockSuccessSupplicant(), {
+    const service = new WeworkBlewcService(new MockSuccessSupplicant(), {
       sn: '123',
       key: '456'
     });

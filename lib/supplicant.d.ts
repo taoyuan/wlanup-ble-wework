@@ -4,7 +4,7 @@ export interface SupplicantCreds {
 }
 export interface SupplicantStatus {
     timestamp: number;
-    nid: string;
+    nid?: string;
     wifi_connected: boolean;
     ip_address?: string;
     mac_address: string;

@@ -2,7 +2,7 @@ import Characteristic = require("bleno/lib/characteristic");
 import {fragment} from "./utils";
 import {EventEmitter} from "events";
 
-export class WxWlanupCharacteristicIndicate extends Characteristic {
+export class WeworkBlewcCharacteristicIndicate extends Characteristic {
   _maxValueSize: number;
   _updateValueCallback?;
 
