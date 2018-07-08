@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import Characteristic = require("bleno/lib/characteristic");
 import { EventEmitter } from "events";
-export declare class WxWlanupCharacteristicIndicate extends Characteristic {
+export declare class WeworkBlewcCharacteristicIndicate extends Characteristic {
     protected ee?: EventEmitter | undefined;
     _maxValueSize: number;
     _updateValueCallback?: any;

@@ -2,15 +2,15 @@
 import PrimaryService = require("bleno/lib/primary-service");
 import * as Bignum from "bignum";
 import { Supplicant } from "./supplicant";
-import { WxWlanupCharacteristicWrite } from "./wx-wlanup-characteristic-write";
-import { WxWlanupCharacteristicIndicate } from "./wx-wlanup-characteristic-indicate";
+import { WeworkBlewcCharacteristicWrite } from "./wework-blewc-characteristic-write";
+import { WeworkBlewcCharacteristicIndicate } from "./wework-blewc-characteristic-indicate";
 import { Packet } from "./packet";
 import { EventEmitter } from "events";
-export interface WxWlanupServiceOptions {
+export interface WeworkBlewcServiceOptions {
     sn: string;
     key: string;
 }
-export declare class WxWlanupService extends PrimaryService {
+export declare class WeworkBlewcService extends PrimaryService {
     protected supplicant: Supplicant;
     _authorized: boolean;
     _nonce: Bignum;
@@ -19,9 +19,9 @@ export declare class WxWlanupService extends PrimaryService {
     uuid: string;
     characteristics: any;
     ee: EventEmitter;
-    ccWrite: WxWlanupCharacteristicWrite;
-    ccIndicate: WxWlanupCharacteristicIndicate;
-    constructor(supplicant: Supplicant, options: WxWlanupServiceOptions, ee?: EventEmitter);
+    ccWrite: WeworkBlewcCharacteristicWrite;
+    ccIndicate: WeworkBlewcCharacteristicIndicate;
+    constructor(supplicant: Supplicant, options: WeworkBlewcServiceOptions, ee?: EventEmitter);
     protected init(): void;
     sendHandshakeRequest(sn: string): void;
     handle(packet: Packet): void;
