@@ -6,6 +6,8 @@ export interface SupplicantCreds {
 
 export interface SupplicantStatus {
   timestamp: number;
+  // node id
+  nid: string;
   wifi_connected: boolean;
   ip_address?: string;
   mac_address: string;
