@@ -46,27 +46,27 @@ export class WeworkBlewcService extends PrimaryService {
 
   protected init() {
     this.ee.on('subscribe', () => {
-      console.log('subscribe');
+      // console.log('subscribe');
       if (!this._authorized) {
         this.sendHandshakeRequest(this.sn)
       }
     });
 
     this.ee.on('unsubscribe', () => {
-      console.log('unsubscribe');
+      // console.log('unsubscribe');
     });
 
     this.ee.on('indicate', () => {
-      console.log('indicate');
+      // console.log('indicate');
     });
 
     this.ee.on('write', data => {
-      console.log(data);
+      // console.log(data);
     });
   }
 
   sendHandshakeRequest(sn: string) {
-    console.log('sendHandshakeRequest');
+    // console.log('sendHandshakeRequest');
     this._nonce = Bignum.fromBuffer(randomBytes(8));
     this.send(CMD.REQ_HANDSHAKE, {
       client_nonce: this._nonce.toString(10),
@@ -163,7 +163,7 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   async handleWiFiConnect(packet: Packet) {
-    console.log('handle connect', packet);
+    // console.log('handle connect', packet);
     const creds = <WiFiCreds> packet.body;
     try {
       await this.supplicant.connect({
@@ -189,7 +189,7 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   write(packet: Packet) {
-    console.log('write packet', packet);
+    // console.log('write packet', packet);
     return this.ccIndicate.write(encodePacket(packet));
   }
 }
