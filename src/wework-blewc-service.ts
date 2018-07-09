@@ -33,7 +33,7 @@ export class WeworkBlewcService extends PrimaryService {
     this.sn = options.sn;
     this.key = options.key;
 
-    this.ee = ee ||  new EventEmitter();
+    this.ee = ee || new EventEmitter();
 
     this.ccWrite = new WeworkBlewcCharacteristicWrite();
     this.ccWrite.onPacket = packet => this.handle(packet);
@@ -76,32 +76,29 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   handle(packet: Packet) {
-    if (!this._authorized) {
-      switch (packet.cmd) {
-        case CMD.RES_HANDSHAKE:
-          this.handleHandshakeResponse(packet);
-          break;
-        case CMD.RES_CONFIRM_HANDSHAKE:
-          this.handleHandshakeConfirm(packet);
-          break;
-        default:
-          console.warn('Unauthorized request');
-          break;
-      }
-      return;
+    // if (!this._authorized) {
+    switch (packet.cmd) {
+      case CMD.RES_HANDSHAKE:
+        this.handleHandshakeResponse(packet);
+        return;
+      case CMD.RES_CONFIRM_HANDSHAKE:
+        this.handleHandshakeConfirm(packet);
+        return;
     }
+    // return;
+    // }
 
     switch (packet.cmd) {
       case CMD.PUSH_SET_WIFI:
         this.handleWiFiConnect(packet);
-        break;
+        return;
       case CMD.RES_REPORT_DEVICE_STATUS:
       case CMD.PUSH_GET_DEVICE_STATUS:
         this.handleReqStatus(packet);
-        break;
+        return;
       default:
         console.warn('unknown packet', packet);
-        break;
+        return;
     }
   }
 
