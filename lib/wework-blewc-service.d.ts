@@ -29,7 +29,7 @@ export declare class WeworkBlewcService extends PrimaryService {
     handleHandshakeConfirm(packet: Packet): Promise<boolean | undefined>;
     handleWiFiConnect(packet: Packet): Promise<void>;
     handleReqStatus(packet: Packet): Promise<void>;
-    reportStatus(seq: number): Promise<void>;
+    reportStatus(seq: number, status?: any): Promise<void>;
     send(cmd: any, data: any, seq: any): void;
     write(packet: Packet): void;
 }

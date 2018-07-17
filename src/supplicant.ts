@@ -5,6 +5,7 @@ export interface SupplicantCreds {
 }
 
 export interface SupplicantStatus {
+  errcode?: number;
   timestamp: number;
   // node id
   nid?: string;

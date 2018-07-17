@@ -3,6 +3,7 @@ export interface SupplicantCreds {
     key: string;
 }
 export interface SupplicantStatus {
+    errcode?: number;
     timestamp: number;
     nid?: string;
     wifi_connected: boolean;
