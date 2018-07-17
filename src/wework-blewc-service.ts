@@ -161,25 +161,22 @@ export class WeworkBlewcService extends PrimaryService {
 
   async handleWiFiConnect(packet: Packet) {
     // console.log('handle connect', packet);
-    let error;
+    let result;
     const creds = <WiFiCreds> packet.body;
     try {
-      await this.supplicant.connect({
+      result = await this.supplicant.connect({
         ssid: creds.ssid,
         key: creds.password
       });
-    } catch (e) {
-      error = e.error;
     } finally {
       const status = await this.supplicant.status();
-      if (error && error.code) {
-        if (error.code === -32011) {
+      status.errcode = 0;
+      if (result && result.error) {
+        if (result.error.code === -32011) {
           status.errcode = 1001;
         } else {
           status.errcode = 1002;
         }
-      } else {
-        status.errcode = 0;
       }
       console.log('[wlanup-ble-wework] handleWiFiConnect:', status);
       await this.reportStatus(packet.seq, status);
