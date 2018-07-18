@@ -139,7 +139,7 @@ export class WeworkBlewcService extends PrimaryService {
       return this.ee.emit('error', new Error(res.errmsg));
     }
 
-    let sorted = sort('wework', this._nonce.toString(), res.server_nonce, 'handshake');
+    let sorted = sort('wxwork', this._nonce.toString(), res.server_nonce, 'handshake');
     let signature = hmacsha1(this.key, sorted);
     if (signature !== res.signature) {
       return this.ee.emit('error', new Error('Unauthorized'));
