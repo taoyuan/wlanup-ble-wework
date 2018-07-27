@@ -49,7 +49,6 @@ export class WeworkBlewcService extends PrimaryService {
   protected init() {
     this.reader.onRead = async () => {
       const status = await this.supplicant.status();
-      console.log('read mac:', status.mac_address);
       const parts = status.mac_address.split(':');
       return Buffer.from(parts.join(''), 'hex');
     };
