@@ -81,7 +81,6 @@ export class WeworkBlewcService extends PrimaryService {
       sn,
       scene: "handshake"
     };
-    console.log('sendHandshakeRequest', data);
     this.ee.emit('handshake:request', data);
     this.send(CMD.REQ_HANDSHAKE, data, nextId());
   }
@@ -175,7 +174,7 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   async handleWiFiConnect(packet: Packet) {
-    this.ee.emit('wifi:connect:request', packet);
+    this.ee.emit('wifi:connect', packet);
     let result;
     const creds = <WiFiCreds> packet.body;
     try {
