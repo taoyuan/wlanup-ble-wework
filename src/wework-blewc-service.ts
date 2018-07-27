@@ -75,7 +75,7 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   sendHandshakeRequest(sn: string) {
-    this._nonce = Bignum.fromBuffer(randomBytes(8));
+    this._nonce = Bignum.fromBuffer(Buffer.concat([Buffer.from([0]), randomBytes(7)], 8));
     const data = {
       client_nonce: this._nonce.toString(10),
       sn,
