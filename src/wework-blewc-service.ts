@@ -53,10 +53,10 @@ export class WeworkBlewcService extends PrimaryService {
       return Buffer.from(parts.join(''), 'hex');
     };
 
+    this.writer.onData = data => this.ee.emit('data', data);
     this.writer.onPacket = packet => this.handle(packet);
 
     this.ee.on('subscribe', () => {
-      console.log('subscribe');
       this._authorized = false;
       this.sendHandshakeRequest(this.sn)
     });

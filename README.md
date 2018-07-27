@@ -2,16 +2,20 @@
 
 ## events
 
+### Raw Data
+
+* `data` - received raw data
+
 ### Packet
 
-* `packet` - every packet form wework to device 
+* `packet` - every parsed packet form wework to device 
 
 ### Handshake
 
 * `handshake:request` - device to wework handshake
 * `handshake:response` - wework to device handshake confirmation
 
-### WiFi connect
+### WiFi Connect
 * `wifi:connect` - wework to device set wifi credentials
 * `wifi:connect:result` - the result of wifi connect
 

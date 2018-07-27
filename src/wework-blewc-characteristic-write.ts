@@ -6,6 +6,7 @@ export class WeworkBlewcCharacteristicWrite extends Characteristic {
   _parser: Parser = new Parser();
 
   onPacket: (packet) => void;
+  onData: (data) => void;
 
   constructor() {
     super({
@@ -17,7 +18,9 @@ export class WeworkBlewcCharacteristicWrite extends Characteristic {
   }
 
   onWriteRequest(data, offset, withoutResponse, callback) {
-    console.log('write', data);
+    if (this.onData) {
+      this.onData(data);
+    }
     this._parser.parse(data);
     callback && callback(Characteristic.RESULT_SUCCESS);
   };
