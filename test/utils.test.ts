@@ -11,12 +11,12 @@ describe("utils", () => {
   });
 
   it('hmacsha1', () => {
-    const client_nonce = '2182195003008728305';
-    const server_nonce = '16097309590180193298';
-    const sorted = sort('wework', client_nonce, server_nonce, 'handshake');
+    const client_nonce = '10534983059029401961';
+    const server_nonce = '4471383152946429127';
+    const sorted = sort('wxwork', client_nonce, server_nonce, 'handshake');
     console.log(sorted);
     const signature = hmacsha1(key, sorted);
-    const expected = '25bd85b40c1ced971e24f5c5ee95efeedec25d04';
+    const expected = 'ed9092256c9a427b926e37305ab2a6a2e741d1d8';
     assert.equal(signature, expected);
   })
 });

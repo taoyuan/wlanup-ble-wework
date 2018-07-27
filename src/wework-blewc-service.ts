@@ -56,10 +56,9 @@ export class WeworkBlewcService extends PrimaryService {
     this.writer.onPacket = packet => this.handle(packet);
 
     this.ee.on('subscribe', () => {
-      // console.log('subscribe');
-      if (!this._authorized) {
-        this.sendHandshakeRequest(this.sn)
-      }
+      console.log('subscribe');
+      this._authorized = false;
+      this.sendHandshakeRequest(this.sn)
     });
 
     this.ee.on('unsubscribe', () => {
@@ -76,16 +75,19 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   sendHandshakeRequest(sn: string) {
-    // console.log('sendHandshakeRequest');
     this._nonce = Bignum.fromBuffer(randomBytes(8));
-    this.send(CMD.REQ_HANDSHAKE, {
+    const data = {
       client_nonce: this._nonce.toString(10),
       sn,
       scene: "handshake"
-    }, nextId())
+    };
+    console.log('sendHandshakeRequest', data);
+    this.ee.emit('handshake:request', data);
+    this.send(CMD.REQ_HANDSHAKE, data, nextId());
   }
 
   handle(packet: Packet) {
+    this.ee.emit('packet', packet);
     // if (!this._authorized) {
     switch (packet.cmd) {
       case CMD.RES_HANDSHAKE:
@@ -146,6 +148,7 @@ export class WeworkBlewcService extends PrimaryService {
     }
    */
   async handleHandshakeResponse(packet: Packet) {
+    this.ee.emit('handshake:response', packet);
     const res = <HandshakeResponse>packet.body;
     if (res.errcode) {
       return this.ee.emit('error', new Error(res.errmsg));
@@ -154,7 +157,7 @@ export class WeworkBlewcService extends PrimaryService {
     let sorted = sort('wxwork', this._nonce.toString(), res.server_nonce, 'handshake');
     let signature = hmacsha1(this.key, sorted);
     if (signature !== res.signature) {
-      return this.ee.emit('error', new Error('Unauthorized'));
+      return this.ee.emit('error', new Error('Signature received "' + res.signature + '" is not matched with local signature: "' + signature + '"'));
     }
 
     // confirm signature
@@ -172,6 +175,7 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   async handleWiFiConnect(packet: Packet) {
+    this.ee.emit('wifi:connect:request', packet);
     let result;
     const creds = <WiFiCreds> packet.body;
     try {
@@ -189,23 +193,24 @@ export class WeworkBlewcService extends PrimaryService {
           status.errcode = 1002;
         }
       }
-      console.log('[wlanup-ble-wework] handleWiFiConnect:', status);
+      this.ee.emit('wifi:connect:result', status);
       await this.reportStatus(packet.seq, status);
     }
   }
 
   async handleReqStatus(packet: Packet) {
+    this.ee.emit('status:request', packet);
     return this.reportStatus(packet.seq);
   }
 
   async reportStatus(seq: number, status?) {
     status = status || await this.supplicant.status();
-    console.log('reportStatus', seq, status);
+    this.ee.emit('status:report', {seq, status});
     return await this.send(CMD.REQ_REPORT_DEVICE_STATUS, status, seq);
   }
 
   async handleReportStatusResponse(packet: Packet) {
-    // no-op
+    this.ee.emit('status:response', packet);
   }
 
   send(cmd, data, seq) {

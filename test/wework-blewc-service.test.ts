@@ -7,7 +7,7 @@ import * as s from "./support";
 
 describe('service', () => {
 
-  it('should set wifi', (done) => {
+  it.skip('should set wifi', (done) => {
     const res: Buffer[] = [];
 
     const service = new WeworkBlewcService(new MockSuccessSupplicant(), {
