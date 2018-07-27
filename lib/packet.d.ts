@@ -9,6 +9,7 @@ export declare enum CMD {
     REQ_REPORT_DEVICE_STATUS = 10004,
     RES_REPORT_DEVICE_STATUS = 20004
 }
+export declare const MAGIC_NUMBER = 254;
 export interface WiFiCreds {
     ssid: string;
     bssid: string;

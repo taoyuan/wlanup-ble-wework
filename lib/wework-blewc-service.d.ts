@@ -2,6 +2,7 @@
 import PrimaryService = require("bleno/lib/primary-service");
 import * as Bignum from "bignum";
 import { Supplicant } from "./supplicant";
+import { WeworkBlewcCharacteristicRead } from "./wework-blewc-characteristic-read";
 import { WeworkBlewcCharacteristicWrite } from "./wework-blewc-characteristic-write";
 import { WeworkBlewcCharacteristicIndicate } from "./wework-blewc-characteristic-indicate";
 import { Packet } from "./packet";
@@ -19,8 +20,9 @@ export declare class WeworkBlewcService extends PrimaryService {
     uuid: string;
     characteristics: any;
     ee: EventEmitter;
-    ccWrite: WeworkBlewcCharacteristicWrite;
-    ccIndicate: WeworkBlewcCharacteristicIndicate;
+    reader: WeworkBlewcCharacteristicRead;
+    writer: WeworkBlewcCharacteristicWrite;
+    indicator: WeworkBlewcCharacteristicIndicate;
     constructor(supplicant: Supplicant, options: WeworkBlewcServiceOptions, ee?: EventEmitter);
     protected init(): void;
     sendHandshakeRequest(sn: string): void;
@@ -30,6 +32,7 @@ export declare class WeworkBlewcService extends PrimaryService {
     handleWiFiConnect(packet: Packet): Promise<void>;
     handleReqStatus(packet: Packet): Promise<void>;
     reportStatus(seq: number, status?: any): Promise<void>;
+    handleReportStatusResponse(packet: Packet): Promise<void>;
     send(cmd: any, data: any, seq: any): void;
     write(packet: Packet): void;
 }

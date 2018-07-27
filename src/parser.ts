@@ -1,6 +1,6 @@
 import BufferList = require("bl");
 import {EventEmitter} from "events";
-import {Packet} from "./packet";
+import {MAGIC_NUMBER, Packet} from "./packet";
 
 export class Parser extends EventEmitter {
   settings;
@@ -43,6 +43,8 @@ export class Parser extends EventEmitter {
 
   _parse(buf: Buffer) {
     if (this.error) this._resetState();
+    // reset state if received new header
+    if (buf[0] === MAGIC_NUMBER) this._resetState();
 
     this._list.append(buf);
 

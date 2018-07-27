@@ -2,6 +2,7 @@ import PrimaryService = require("bleno/lib/primary-service");
 import * as Bignum from "bignum";
 import {randomBytes} from "crypto";
 import {Supplicant} from "./supplicant";
+import {WeworkBlewcCharacteristicRead} from "./wework-blewc-characteristic-read";
 import {WeworkBlewcCharacteristicWrite} from "./wework-blewc-characteristic-write";
 import {WeworkBlewcCharacteristicIndicate} from "./wework-blewc-characteristic-indicate";
 import {CMD, HandshakeResponse, Packet, WiFiCreds} from "./packet";
@@ -24,8 +25,9 @@ export class WeworkBlewcService extends PrimaryService {
   characteristics;
 
   ee: EventEmitter;
-  ccWrite: WeworkBlewcCharacteristicWrite;
-  ccIndicate: WeworkBlewcCharacteristicIndicate;
+  reader: WeworkBlewcCharacteristicRead;
+  writer: WeworkBlewcCharacteristicWrite;
+  indicator: WeworkBlewcCharacteristicIndicate;
 
   constructor(protected supplicant: Supplicant, options: WeworkBlewcServiceOptions, ee?: EventEmitter) {
     super({uuid: 'FCE7'});
@@ -35,16 +37,25 @@ export class WeworkBlewcService extends PrimaryService {
 
     this.ee = ee || new EventEmitter();
 
-    this.ccWrite = new WeworkBlewcCharacteristicWrite();
-    this.ccWrite.onPacket = packet => this.handle(packet);
-    this.ccIndicate = new WeworkBlewcCharacteristicIndicate(this.ee);
+    this.reader = new WeworkBlewcCharacteristicRead();
+    this.writer = new WeworkBlewcCharacteristicWrite();
+    this.indicator = new WeworkBlewcCharacteristicIndicate(this.ee);
 
-    this.characteristics = [this.ccWrite, this.ccIndicate];
+    this.characteristics = [this.reader, this.writer, this.indicator];
 
     this.init();
   }
 
   protected init() {
+    this.reader.onRead = async () => {
+      const status = await this.supplicant.status();
+      console.log('read mac:', status.mac_address);
+      const parts = status.mac_address.split(':');
+      return Buffer.from(parts.join(''), 'hex');
+    };
+
+    this.writer.onPacket = packet => this.handle(packet);
+
     this.ee.on('subscribe', () => {
       // console.log('subscribe');
       if (!this._authorized) {
@@ -92,9 +103,11 @@ export class WeworkBlewcService extends PrimaryService {
       case CMD.PUSH_SET_WIFI:
         this.handleWiFiConnect(packet);
         return;
-      case CMD.RES_REPORT_DEVICE_STATUS:
       case CMD.PUSH_GET_DEVICE_STATUS:
         this.handleReqStatus(packet);
+        return;
+      case CMD.RES_REPORT_DEVICE_STATUS:
+        this.handleReportStatusResponse(packet);
         return;
       default:
         console.warn('unknown packet', packet);
@@ -160,7 +173,6 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   async handleWiFiConnect(packet: Packet) {
-    // console.log('handle connect', packet);
     let result;
     const creds = <WiFiCreds> packet.body;
     try {
@@ -188,8 +200,13 @@ export class WeworkBlewcService extends PrimaryService {
   }
 
   async reportStatus(seq: number, status?) {
-    status = status ||  await this.supplicant.status();
+    status = status || await this.supplicant.status();
+    console.log('reportStatus', seq, status);
     return await this.send(CMD.REQ_REPORT_DEVICE_STATUS, status, seq);
+  }
+
+  async handleReportStatusResponse(packet: Packet) {
+    // no-op
   }
 
   send(cmd, data, seq) {
@@ -198,6 +215,6 @@ export class WeworkBlewcService extends PrimaryService {
 
   write(packet: Packet) {
     // console.log('write packet', packet);
-    return this.ccIndicate.write(encodePacket(packet));
+    return this.indicator.write(encodePacket(packet));
   }
 }

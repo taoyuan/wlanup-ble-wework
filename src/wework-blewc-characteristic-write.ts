@@ -17,6 +17,7 @@ export class WeworkBlewcCharacteristicWrite extends Characteristic {
   }
 
   onWriteRequest(data, offset, withoutResponse, callback) {
+    console.log('write', data);
     this._parser.parse(data);
     callback && callback(Characteristic.RESULT_SUCCESS);
   };

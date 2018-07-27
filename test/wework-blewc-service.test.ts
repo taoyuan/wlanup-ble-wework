@@ -16,12 +16,12 @@ describe('service', () => {
     });
     // hacking
     service._authorized = true;
-    service.ccIndicate.onSubscribe(20, (data) => {
+    service.indicator.onSubscribe(20, (data) => {
       res.push(Buffer.from(data));
     });
 
     for (let i = 0; i < samples.PUSH_SET_WIFI.length; i++) {
-      service.ccWrite.onWriteRequest(Buffer.from(s.samples.PUSH_SET_WIFI[i], 'hex'), null, null, () => {
+      service.writer.onWriteRequest(Buffer.from(s.samples.PUSH_SET_WIFI[i], 'hex'), null, null, () => {
       });
     }
 
