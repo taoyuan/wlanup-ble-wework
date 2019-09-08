@@ -1,5 +1,7 @@
 # wlanup-ble-wework
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/taoyuan/wlanup-ble-wework.svg)](https://greenkeeper.io/)
+
 ## events
 
 ### Raw Data
